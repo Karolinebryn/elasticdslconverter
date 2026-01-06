@@ -6,7 +6,7 @@ export function useTranslation() {
   const [isLoading, setIsLoading] = useState(false);
   const [output, setOutput] = useState("");
 
-  const translate = async (queryDsl: string) => {
+  const translate = async (queryDsl: string, version: string) => {
     if (!queryDsl.trim()) {
       toast.error("Please enter a Query DSL to translate");
       return;
@@ -32,7 +32,7 @@ export function useTranslation() {
             "Content-Type": "application/json",
             Authorization: `Bearer ${import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY}`,
           },
-          body: JSON.stringify({ queryDsl }),
+          body: JSON.stringify({ queryDsl, version }),
         }
       );
 

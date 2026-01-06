@@ -11,14 +11,20 @@ serve(async (req) => {
   }
 
   try {
-    const { queryDsl } = await req.json();
+    const { queryDsl, version = "8.x" } = await req.json();
     const LOVABLE_API_KEY = Deno.env.get("LOVABLE_API_KEY");
 
     if (!LOVABLE_API_KEY) {
       throw new Error("LOVABLE_API_KEY is not configured");
     }
 
-    const systemPrompt = `You are an expert in Elasticsearch and the .NET Elasticsearch clients. Your task is to translate Elasticsearch Query DSL JSON into equivalent C# code using Elastic.Clients.Elasticsearch (the official .NET client for Elasticsearch 8.x).
+    const versionNote = version === "9.x" 
+      ? "This is for Elasticsearch 9.x which uses the same Elastic.Clients.Elasticsearch namespace but may have newer APIs and features."
+      : "This is for Elasticsearch 8.x using the Elastic.Clients.Elasticsearch namespace.";
+
+    const systemPrompt = `You are an expert in Elasticsearch and the .NET Elasticsearch clients. Your task is to translate Elasticsearch Query DSL JSON into equivalent C# code using Elastic.Clients.Elasticsearch (the official .NET client for Elasticsearch ${version}).
+
+${versionNote}
 
 Guidelines:
 - Generate clean, idiomatic C# code that compiles
