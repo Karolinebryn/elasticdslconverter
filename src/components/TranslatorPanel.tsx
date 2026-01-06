@@ -3,7 +3,7 @@ import { ArrowRight, Loader2, Sparkles } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { CodeEditor } from "./CodeEditor";
-import { VersionSelector } from "./VersionSelector";
+import { VersionSelector, type ElasticVersion } from "./VersionSelector";
 import { CopyButton } from "./CopyButton";
 import { useTranslation } from "@/hooks/useTranslation";
 
@@ -26,10 +26,11 @@ const sampleQuery = `{
 
 export function TranslatorPanel() {
   const [queryDsl, setQueryDsl] = useState("");
+  const [version, setVersion] = useState<ElasticVersion>("8.x");
   const { translate, isLoading, output } = useTranslation();
 
   const handleTranslate = () => {
-    translate(queryDsl);
+    translate(queryDsl, version);
   };
 
   const loadSample = () => {
@@ -47,7 +48,7 @@ export function TranslatorPanel() {
           </Button>
         </CardHeader>
         <CardContent className="space-y-4">
-          <VersionSelector />
+          <VersionSelector value={version} onChange={setVersion} />
           <CodeEditor
             value={queryDsl}
             onChange={setQueryDsl}
