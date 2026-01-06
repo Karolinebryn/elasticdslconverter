@@ -32,7 +32,7 @@ POST my-index/_search
 }
 
 EXAMPLE OUTPUT for 9.x:
-var response = await client.SearchAsync<MyDocument>(s => s
+var response = await client.SearchAsync<object>(s => s
     .Index("my-index")
     .Query(q => q
         .Bool(b => b
@@ -64,7 +64,7 @@ POST my-index/_search
 }
 
 EXAMPLE OUTPUT for 8.x:
-var response = await client.SearchAsync<MyDocument>(s => s
+var response = await client.SearchAsync<object>(s => s
     .Index("my-index")
     .Query(q => q
         .Bool(b => b
@@ -94,7 +94,8 @@ ${versionNote}
 ${versionExamples}
 
 CRITICAL OUTPUT RULES:
-- Output ONLY the method call (e.g., var response = await client.SearchAsync<T>(...))
+- Output ONLY the method call (e.g., var response = await client.SearchAsync<object>(...))
+- ALWAYS use <object> as the generic type parameter, never use specific types
 - NO using statements
 - NO class definitions
 - NO constructors
