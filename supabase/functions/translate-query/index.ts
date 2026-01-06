@@ -32,9 +32,6 @@ POST my-index/_search
 }
 
 EXAMPLE OUTPUT for 9.x:
-using Elastic.Clients.Elasticsearch;
-using Elastic.Clients.Elasticsearch.QueryDsl;
-
 var response = await client.SearchAsync<MyDocument>(s => s
     .Index("my-index")
     .Query(q => q
@@ -48,28 +45,6 @@ var response = await client.SearchAsync<MyDocument>(s => s
                     )
                 )
             )
-        )
-    )
-);
-
-EXAMPLE INPUT for 9.x (match query):
-POST products/_search
-{
-  "query": {
-    "match": { "name": "laptop" }
-  }
-}
-
-EXAMPLE OUTPUT for 9.x:
-using Elastic.Clients.Elasticsearch;
-using Elastic.Clients.Elasticsearch.QueryDsl;
-
-var response = await client.SearchAsync<Product>(s => s
-    .Index("products")
-    .Query(q => q
-        .Match(m => m
-            .Field(f => f.Name)
-            .Query("laptop")
         )
     )
 );
@@ -89,9 +64,6 @@ POST my-index/_search
 }
 
 EXAMPLE OUTPUT for 8.x:
-using Elastic.Clients.Elasticsearch;
-using Elastic.Clients.Elasticsearch.QueryDsl;
-
 var response = await client.SearchAsync<MyDocument>(s => s
     .Index("my-index")
     .Query(q => q
@@ -108,58 +80,34 @@ var response = await client.SearchAsync<MyDocument>(s => s
         )
     )
 );
-
-EXAMPLE INPUT for 8.x (match query):
-POST products/_search
-{
-  "query": {
-    "match": { "name": "laptop" }
-  }
-}
-
-EXAMPLE OUTPUT for 8.x:
-using Elastic.Clients.Elasticsearch;
-using Elastic.Clients.Elasticsearch.QueryDsl;
-
-var response = await client.SearchAsync<Product>(s => s
-    .Index("products")
-    .Query(q => q
-        .Match(m => m
-            .Field(f => f.Name)
-            .Query("laptop")
-        )
-    )
-);
 `;
 
     const versionExamples = version === "9.x" ? examples9x : examples8x;
     const versionNote = version === "9.x" 
-      ? "This is for Elasticsearch 9.x using Elastic.Clients.Elasticsearch. In 9.x, use DateRange() for date range queries with simple string dates."
-      : "This is for Elasticsearch 8.x using Elastic.Clients.Elasticsearch. In 8.x, use DateRange() with DateMath.Anchored() for date values.";
+      ? "This is for Elasticsearch 9.x using Elastic.Clients.Elasticsearch."
+      : "This is for Elasticsearch 8.x using Elastic.Clients.Elasticsearch.";
 
-    const systemPrompt = `You are an expert in Elasticsearch and the .NET Elasticsearch clients. Your task is to translate Elasticsearch requests into equivalent C# code using Elastic.Clients.Elasticsearch (the official .NET client for Elasticsearch ${version}).
+    const systemPrompt = `You are an expert in Elasticsearch and the .NET Elasticsearch clients. Translate Elasticsearch requests into C# code using Elastic.Clients.Elasticsearch for version ${version}.
 
 ${versionNote}
 
 ${versionExamples}
 
-The user input will contain:
-1. The HTTP method and Elasticsearch API endpoint (e.g., "POST my-index/_search", "PUT my-index", "GET my-index/_doc/1")
-2. The request body JSON (if applicable)
+CRITICAL OUTPUT RULES:
+- Output ONLY the method call (e.g., var response = await client.SearchAsync<T>(...))
+- NO using statements
+- NO class definitions
+- NO constructors
+- NO function/method wrappers
+- NO comments
+- NO markdown code blocks
+- Just the raw executable statement(s)
 
 Guidelines:
-- FOLLOW THE EXAMPLES ABOVE EXACTLY for the selected version
-- Parse the API endpoint to determine which client method to use (SearchAsync, IndexAsync, GetAsync, DeleteAsync, etc.)
+- Follow the examples above exactly
 - Extract the index name from the endpoint
-- Generate clean, idiomatic C# code that compiles
-- Use the fluent API style as shown in examples
-- Include necessary using statements at the top
-- Handle all query types: bool, match, term, range, nested, aggregations, etc.
-- Use ElasticsearchClient (not ElasticClient)
-- Use async methods (SearchAsync, IndexAsync, etc.)
-- Output ONLY the raw C# code, no explanations
-- Do NOT include markdown code block markers
-- Use proper indentation and formatting`;
+- Use the fluent API style
+- Use async methods (SearchAsync, IndexAsync, etc.)`;
 
     const response = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
       method: "POST",
