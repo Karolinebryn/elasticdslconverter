@@ -11,18 +11,14 @@ serve(async (req) => {
   }
 
   try {
-    const { queryDsl, version } = await req.json();
+    const { queryDsl } = await req.json();
     const LOVABLE_API_KEY = Deno.env.get("LOVABLE_API_KEY");
 
     if (!LOVABLE_API_KEY) {
       throw new Error("LOVABLE_API_KEY is not configured");
     }
 
-    const clientLibrary = version === "8.x" 
-      ? "Elastic.Clients.Elasticsearch (the new official .NET client for Elasticsearch 8.x)"
-      : "NEST 7.x (the high-level .NET client for Elasticsearch 7.x)";
-
-    const systemPrompt = `You are an expert in Elasticsearch and the .NET Elasticsearch clients. Your task is to translate Elasticsearch Query DSL JSON into equivalent C# code using ${clientLibrary}.
+    const systemPrompt = `You are an expert in Elasticsearch and the .NET Elasticsearch clients. Your task is to translate Elasticsearch Query DSL JSON into equivalent C# code using Elastic.Clients.Elasticsearch (the official .NET client for Elasticsearch 8.x).
 
 Guidelines:
 - Generate clean, idiomatic C# code that compiles
@@ -30,23 +26,12 @@ Guidelines:
 - Include necessary using statements at the top
 - Add brief comments explaining complex parts
 - Handle all query types: bool, match, term, range, nested, aggregations, etc.
-- For ${version === "8.x" ? "Elastic.Clients.Elasticsearch" : "NEST"}, use the correct method names and syntax
-- Output ONLY the C# code, no explanations before or after
-- Use proper indentation and formatting
-
-${version === "8.x" ? `
-For Elastic.Clients.Elasticsearch 8.x:
 - Use ElasticsearchClient instead of ElasticClient
 - Use SearchRequest<T> or the fluent .Search() method
 - Use the new Query class structure
 - Example namespace: Elastic.Clients.Elasticsearch
-` : `
-For NEST 7.x:
-- Use ElasticClient
-- Use SearchDescriptor<T> or SearchRequest<T>
-- Use the fluent lambda syntax
-- Example namespace: Nest
-`}`;
+- Output ONLY the C# code, no explanations before or after
+- Use proper indentation and formatting`;
 
     const response = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
       method: "POST",
