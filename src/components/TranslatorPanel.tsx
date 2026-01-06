@@ -7,7 +7,8 @@ import { VersionSelector, type ElasticVersion } from "./VersionSelector";
 import { CopyButton } from "./CopyButton";
 import { useTranslation } from "@/hooks/useTranslation";
 
-const sampleQuery = `{
+const sampleQuery = `POST expert-tracking-dev/_search
+{
   "query": {
     "bool": {
       "must": [
@@ -42,7 +43,7 @@ export function TranslatorPanel() {
       {/* Input Panel */}
       <Card className="border-border shadow-md">
         <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-4">
-          <CardTitle className="text-lg font-semibold">Query DSL Input</CardTitle>
+          <CardTitle className="text-lg font-semibold">Elasticsearch Request</CardTitle>
           <Button variant="ghost" size="sm" onClick={loadSample} className="text-xs">
             Load Sample
           </Button>
@@ -53,7 +54,7 @@ export function TranslatorPanel() {
             value={queryDsl}
             onChange={setQueryDsl}
             language="json"
-            placeholder="Paste your Elasticsearch Query DSL here..."
+            placeholder="POST my-index/_search&#10;{&#10;  &quot;query&quot;: { ... }&#10;}"
           />
           <Button
             onClick={handleTranslate}
