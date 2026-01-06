@@ -12,12 +12,20 @@ export function useTranslation() {
       return;
     }
 
-    // Validate JSON
-    try {
-      JSON.parse(queryDsl);
-    } catch {
-      toast.error("Invalid JSON. Please check your Query DSL syntax.");
-      return;
+    // Extract JSON from input (skip the first line if it's the API endpoint)
+    const lines = queryDsl.trim().split('\n');
+    const firstLine = lines[0].trim();
+    const hasEndpoint = /^(GET|POST|PUT|DELETE|HEAD|PATCH)\s+/i.test(firstLine);
+    const jsonPart = hasEndpoint ? lines.slice(1).join('\n').trim() : queryDsl.trim();
+
+    // Validate JSON if there's a body
+    if (jsonPart) {
+      try {
+        JSON.parse(jsonPart);
+      } catch {
+        toast.error("Invalid JSON. Please check your Query DSL syntax.");
+        return;
+      }
     }
 
     setIsLoading(true);

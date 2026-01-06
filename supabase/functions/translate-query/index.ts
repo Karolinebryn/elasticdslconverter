@@ -22,19 +22,25 @@ serve(async (req) => {
       ? "This is for Elasticsearch 9.x which uses the same Elastic.Clients.Elasticsearch namespace but may have newer APIs and features."
       : "This is for Elasticsearch 8.x using the Elastic.Clients.Elasticsearch namespace.";
 
-    const systemPrompt = `You are an expert in Elasticsearch and the .NET Elasticsearch clients. Your task is to translate Elasticsearch Query DSL JSON into equivalent C# code using Elastic.Clients.Elasticsearch (the official .NET client for Elasticsearch ${version}).
+    const systemPrompt = `You are an expert in Elasticsearch and the .NET Elasticsearch clients. Your task is to translate Elasticsearch requests into equivalent C# code using Elastic.Clients.Elasticsearch (the official .NET client for Elasticsearch ${version}).
 
 ${versionNote}
 
+The user input will contain:
+1. The HTTP method and Elasticsearch API endpoint (e.g., "POST my-index/_search", "PUT my-index", "GET my-index/_doc/1")
+2. The request body JSON (if applicable)
+
 Guidelines:
+- Parse the API endpoint to determine which client method to use (SearchAsync, IndexAsync, GetAsync, DeleteAsync, etc.)
+- Extract the index name from the endpoint
 - Generate clean, idiomatic C# code that compiles
 - Use the fluent API style when available
 - Include necessary using statements at the top
 - Add brief comments explaining complex parts
 - Handle all query types: bool, match, term, range, nested, aggregations, etc.
+- Handle all API types: _search, _doc, _bulk, _update, _delete_by_query, etc.
 - Use ElasticsearchClient instead of ElasticClient
-- Use SearchRequest<T> or the fluent .Search() method
-- Use the new Query class structure
+- Use async methods (SearchAsync, IndexAsync, etc.)
 - Example namespace: Elastic.Clients.Elasticsearch
 - Output ONLY the C# code, no explanations before or after
 - Use proper indentation and formatting`;
