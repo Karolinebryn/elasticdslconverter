@@ -26,11 +26,10 @@ const sampleQuery = `{
 
 export function TranslatorPanel() {
   const [queryDsl, setQueryDsl] = useState("");
-  const [version, setVersion] = useState("8.x");
   const { translate, isLoading, output } = useTranslation();
 
   const handleTranslate = () => {
-    translate(queryDsl, version);
+    translate(queryDsl);
   };
 
   const loadSample = () => {
@@ -48,7 +47,7 @@ export function TranslatorPanel() {
           </Button>
         </CardHeader>
         <CardContent className="space-y-4">
-          <VersionSelector value={version} onChange={setVersion} />
+          <VersionSelector />
           <CodeEditor
             value={queryDsl}
             onChange={setQueryDsl}
