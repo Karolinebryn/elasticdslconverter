@@ -42,7 +42,8 @@ Guidelines:
 - Use ElasticsearchClient instead of ElasticClient
 - Use async methods (SearchAsync, IndexAsync, etc.)
 - Example namespace: Elastic.Clients.Elasticsearch
-- Output ONLY the C# code, no explanations before or after
+- Output ONLY the raw C# code, no explanations before or after
+- Do NOT include markdown code block markers like \`\`\`csharp or \`\`\`
 - Use proper indentation and formatting`;
 
     const response = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
