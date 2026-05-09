@@ -80,22 +80,37 @@ POST my-index/_search
 }
 
 EXAMPLE OUTPUT for 9.x:
-var response = await client.SearchAsync<object>(s => s
-    .Index("my-index")
-    .Query(q => q
-        .Bool(b => b
-            .Must(m => m
-                .Range(r => r
-                    .DateRange(dr => dr
-                        .Field(f => f.Timestamp)
-                        .Gte("2025-01-01")
-                        .Lte("2025-12-31")
+using System;
+using System.Threading.Tasks;
+using Elastic.Clients.Elasticsearch;
+using Elastic.Clients.Elasticsearch.QueryDsl;
+
+namespace ElasticQueries;
+
+public class MyIndexQuery
+{
+    public async Task<SearchResponse<object>> ExecuteAsync(ElasticsearchClient client)
+    {
+        var response = await client.SearchAsync<object>(s => s
+            .Index("my-index")
+            .Query(q => q
+                .Bool(b => b
+                    .Must(m => m
+                        .Range(r => r
+                            .DateRange(dr => dr
+                                .Field("timestamp")
+                                .Gte("2025-01-01")
+                                .Lte("2025-12-31")
+                            )
+                        )
                     )
                 )
             )
-        )
-    )
-);
+        );
+
+        return response;
+    }
+}
 `;
 
     const examples8x = `
@@ -112,22 +127,37 @@ POST my-index/_search
 }
 
 EXAMPLE OUTPUT for 8.x:
-var response = await client.SearchAsync<object>(s => s
-    .Index("my-index")
-    .Query(q => q
-        .Bool(b => b
-            .Must(m => m
-                .Range(r => r
-                    .DateRange(dr => dr
-                        .Field(f => f.Timestamp)
-                        .Gte(DateMath.Anchored("2025-01-01"))
-                        .Lte(DateMath.Anchored("2025-12-31"))
+using System;
+using System.Threading.Tasks;
+using Elastic.Clients.Elasticsearch;
+using Elastic.Clients.Elasticsearch.QueryDsl;
+
+namespace ElasticQueries;
+
+public class MyIndexQuery
+{
+    public async Task<SearchResponse<object>> ExecuteAsync(ElasticsearchClient client)
+    {
+        var response = await client.SearchAsync<object>(s => s
+            .Index("my-index")
+            .Query(q => q
+                .Bool(b => b
+                    .Must(m => m
+                        .Range(r => r
+                            .DateRange(dr => dr
+                                .Field("timestamp")
+                                .Gte(DateMath.Anchored("2025-01-01"))
+                                .Lte(DateMath.Anchored("2025-12-31"))
+                            )
+                        )
                     )
                 )
             )
-        )
-    )
-);
+        );
+
+        return response;
+    }
+}
 `;
 
     const versionExamples = version === "9.x" ? examples9x : examples8x;
@@ -135,22 +165,21 @@ var response = await client.SearchAsync<object>(s => s
       ? "This is for Elasticsearch 9.x using Elastic.Clients.Elasticsearch."
       : "This is for Elasticsearch 8.x using Elastic.Clients.Elasticsearch.";
 
-    const systemPrompt = `You are an expert in Elasticsearch and the .NET Elasticsearch clients. Translate Elasticsearch requests into C# code using Elastic.Clients.Elasticsearch for version ${version}.
+    const systemPrompt = `You are an expert in Elasticsearch and the .NET Elasticsearch clients. Translate Elasticsearch requests into compilable C# code using Elastic.Clients.Elasticsearch for version ${version}.
 
 ${versionNote}
 
 ${versionExamples}
 
 CRITICAL OUTPUT RULES:
-- Output ONLY the method call (e.g., var response = await client.SearchAsync<object>(...))
-- ALWAYS use <object> as the generic type parameter, never use specific types
-- NO using statements
-- NO class definitions
-- NO constructors
-- NO function/method wrappers
+- Output a complete, compilable C# file
+- ALWAYS include the necessary \`using\` directives at the top (System, System.Threading.Tasks, Elastic.Clients.Elasticsearch, Elastic.Clients.Elasticsearch.QueryDsl, and any others required by the query)
+- ALWAYS wrap the call in a namespace + public class + public async method that accepts an \`ElasticsearchClient client\` parameter and returns the response
+- ALWAYS use \`<object>\` as the generic type parameter, never use specific types
+- Name the class after the index (PascalCase + "Query" suffix), e.g. \`MyIndexQuery\`
 - NO comments
-- NO markdown code blocks
-- Just the raw executable statement(s)
+- NO markdown code blocks or fences
+- Output raw C# source only
 
 Guidelines:
 - Follow the examples above exactly
