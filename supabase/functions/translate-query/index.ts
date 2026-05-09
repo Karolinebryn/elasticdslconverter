@@ -59,11 +59,32 @@ serve(async (req) => {
       });
     }
 
-    const { queryDsl, version = "8.x" } = await req.json();
+    const body = await req.json().catch(() => null);
+    if (!body || typeof body !== "object") {
+      return new Response(JSON.stringify({ error: "Invalid input" }), {
+        status: 400,
+        headers: { ...corsHeaders, "Content-Type": "application/json" },
+      });
+    }
+    const ALLOWED_VERSIONS = ["8.x", "9.x"];
+    const rawVersion = body.version ?? "8.x";
+    const version = ALLOWED_VERSIONS.includes(rawVersion) ? rawVersion : "8.x";
+    const queryDsl = body.queryDsl;
+    const MAX_DSL_BYTES = 32_000;
+    if (!queryDsl || typeof queryDsl !== "string" || queryDsl.length === 0 || queryDsl.length > MAX_DSL_BYTES) {
+      return new Response(JSON.stringify({ error: "Invalid input" }), {
+        status: 400,
+        headers: { ...corsHeaders, "Content-Type": "application/json" },
+      });
+    }
     const LOVABLE_API_KEY = Deno.env.get("LOVABLE_API_KEY");
 
     if (!LOVABLE_API_KEY) {
-      throw new Error("LOVABLE_API_KEY is not configured");
+      console.error("Missing LOVABLE_API_KEY configuration");
+      return new Response(JSON.stringify({ error: "Internal server error" }), {
+        status: 500,
+        headers: { ...corsHeaders, "Content-Type": "application/json" },
+      });
     }
 
     const examples9x = `
@@ -230,7 +251,7 @@ Guidelines:
   } catch (error) {
     console.error("Translation error:", error);
     return new Response(
-      JSON.stringify({ error: error instanceof Error ? error.message : "Unknown error" }),
+      JSON.stringify({ error: "Internal server error" }),
       {
         status: 500,
         headers: { ...corsHeaders, "Content-Type": "application/json" },
