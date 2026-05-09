@@ -32,17 +32,32 @@ export function useTranslation() {
     setOutput("");
 
     try {
+      const { data: sessionData } = await supabase.auth.getSession();
+      const accessToken = sessionData.session?.access_token;
+      if (!accessToken) {
+        toast.error("Session not ready. Please reload the page.");
+        setIsLoading(false);
+        return;
+      }
+
       const response = await fetch(
         `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/translate-query`,
         {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
-            Authorization: `Bearer ${import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY}`,
+            Authorization: `Bearer ${accessToken}`,
+            apikey: import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY,
           },
           body: JSON.stringify({ queryDsl, version }),
         }
       );
+
+      if (response.status === 401) {
+        toast.error("Unauthorized. Please reload the page.");
+        setIsLoading(false);
+        return;
+      }
 
       if (response.status === 429) {
         toast.error("Rate limit exceeded. Please try again later.");
