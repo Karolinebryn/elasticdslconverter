@@ -8,7 +8,7 @@ const Index = () => {
         <TranslatorHeader />
         <TranslatorPanel />
         <footer className="text-center py-8 text-sm text-muted-foreground">
-          Powered by AI • Supports Elastic.Clients.Elasticsearch 8.x and 9.x
+          Powered by AI • Supports Elasticsearch 8.x and 9.x and Elastic.Clients.Elasticsearch 8.x and 9.x
         </footer>
       </div>
     </div>
