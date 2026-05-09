@@ -1,6 +1,6 @@
 # Elastic DSL Converter
 
-A free, open-source web tool that translates Elasticsearch Query DSL into idiomatic C# code using the official `Elastic.Clients.Elasticsearch` .NET client.
+A free, open-source web tool that converts Elasticsearch Query DSL into strongly-typed C# code using [`Elastic.Clients.Elasticsearch`](https://www.elastic.co/docs/reference/elasticsearch/clients/dotnet) — the official high-level .NET client for Elasticsearch.
 
 🌐 **Live site:** https://elasticdslconverter.lovable.app
 
@@ -10,9 +10,9 @@ Paste any Elasticsearch Query DSL request (the JSON you'd send to `_search`, `_c
 
 Useful for:
 
-- Migrating from `Elasticsearch.Net` / `NEST` to the new `Elastic.Clients.Elasticsearch`.
-- Quickly prototyping queries in C# without hand-translating from Kibana Dev Tools.
-- Learning the fluent API by example.
+- Converting queries from Kibana Dev Tools into ready-to-use strongly-typed C#.
+- Quickly prototyping Elasticsearch queries in .NET without hand-translating JSON.
+- Learning the `Elastic.Clients.Elasticsearch` fluent API by example.
 
 ## Supported versions
 
