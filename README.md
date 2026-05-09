@@ -1,73 +1,84 @@
-# Welcome to your Lovable project
+# Elastic DSL Converter
 
-## Project info
+A free, open-source web tool that translates Elasticsearch Query DSL into idiomatic C# code using the official `Elastic.Clients.Elasticsearch` .NET client.
 
-**URL**: https://lovable.dev/projects/REPLACE_WITH_PROJECT_ID
+🌐 **Live site:** https://elasticdslconverter.lovable.app
 
-## How can I edit this code?
+## What it does
 
-There are several ways of editing your application.
+Paste any Elasticsearch Query DSL request (the JSON you'd send to `_search`, `_count`, etc.) and instantly get back the equivalent C# fluent-API call you can drop into your .NET project. Powered by an LLM with version-aware prompts so the output matches the API surface of the client version you select.
 
-**Use Lovable**
+Useful for:
 
-Simply visit the [Lovable Project](https://lovable.dev/projects/REPLACE_WITH_PROJECT_ID) and start prompting.
+- Migrating from `Elasticsearch.Net` / `NEST` to the new `Elastic.Clients.Elasticsearch`.
+- Quickly prototyping queries in C# without hand-translating from Kibana Dev Tools.
+- Learning the fluent API by example.
 
-Changes made via Lovable will be committed automatically to this repo.
+## Supported versions
 
-**Use your preferred IDE**
+| Elasticsearch | .NET Client (`Elastic.Clients.Elasticsearch`) |
+| ------------- | --------------------------------------------- |
+| 8.x           | 8.x                                           |
+| 9.x           | 9.x                                           |
 
-If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in Lovable.
+Pick the target version in the UI before translating — the prompt and few-shot examples switch accordingly.
 
-The only requirement is having Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
+## Tech stack
 
-Follow these steps:
+- **Frontend:** Vite, React, TypeScript, Tailwind CSS, shadcn/ui
+- **Backend:** Lovable Cloud (Supabase Edge Functions + Auth)
+- **AI:** Lovable AI Gateway (Google Gemini)
+
+## Running locally
+
+Requirements: [Node.js](https://nodejs.org) 18+ and npm (use [nvm](https://github.com/nvm-sh/nvm#installing-and-updating) to install).
 
 ```sh
-# Step 1: Clone the repository using the project's Git URL.
-git clone <YOUR_GIT_URL>
+# 1. Clone the repo
+git clone https://github.com/<your-username>/<your-repo>.git
+cd <your-repo>
 
-# Step 2: Navigate to the project directory.
-cd <YOUR_PROJECT_NAME>
+# 2. Install dependencies
+npm install
 
-# Step 3: Install the necessary dependencies.
-npm i
+# 3. Create a .env file in the project root
+cat > .env <<EOF
+VITE_SUPABASE_URL="https://<your-project-ref>.supabase.co"
+VITE_SUPABASE_PUBLISHABLE_KEY="<your-supabase-anon-key>"
+VITE_SUPABASE_PROJECT_ID="<your-project-ref>"
+EOF
 
-# Step 4: Start the development server with auto-reloading and an instant preview.
+# 4. Start the dev server
 npm run dev
 ```
 
-**Edit a file directly in GitHub**
+Open http://localhost:8080 in your browser.
 
-- Navigate to the desired file(s).
-- Click the "Edit" button (pencil icon) at the top right of the file view.
-- Make your changes and commit the changes.
+### Backend setup
 
-**Use GitHub Codespaces**
+The translation runs in a Supabase Edge Function (`supabase/functions/translate-query`) that calls the Lovable AI Gateway. To run your own backend you'll need to:
 
-- Navigate to the main page of your repository.
-- Click on the "Code" button (green button) near the top right.
-- Select the "Codespaces" tab.
-- Click on "New codespace" to launch a new Codespace environment.
-- Edit files directly within the Codespace and commit and push your changes once you're done.
+1. Create a Supabase project and deploy the edge function from `supabase/functions/translate-query`.
+2. Enable **anonymous sign-ins** in Supabase Auth (the client signs in anonymously so the function can verify the JWT).
+3. Set the `LOVABLE_API_KEY` secret on the function (or swap the AI provider in `index.ts` for OpenAI, Anthropic, Gemini, etc.).
 
-## What technologies are used for this project?
+## Project structure
 
-This project is built with:
+```
+src/
+  components/        UI components (editor, header, version selector)
+  hooks/             useTranslation, useAnonAuth
+  pages/             Route pages
+  integrations/      Auto-generated Supabase client
+supabase/
+  functions/
+    translate-query/ Edge function: validates JWT + calls AI gateway
+```
 
-- Vite
-- TypeScript
-- React
-- shadcn-ui
-- Tailwind CSS
+## Contributing
 
-## How can I deploy this project?
+Issues and PRs are welcome! If you spot a wrong translation for a particular query shape, open an issue with the input DSL, the produced C#, and the expected output — these become great few-shot examples to improve the prompt.
 
-Simply open [Lovable](https://lovable.dev/projects/REPLACE_WITH_PROJECT_ID) and click on Share -> Publish.
+## License
 
-## Can I connect a custom domain to my Lovable project?
-
-Yes, you can!
-
-To connect a domain, navigate to Project > Settings > Domains and click Connect Domain.
-
-Read more here: [Setting up a custom domain](https://docs.lovable.dev/features/custom-domain#custom-domain)
+MIT
