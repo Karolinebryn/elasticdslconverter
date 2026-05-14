@@ -89,8 +89,13 @@ const About = () => {
         </div>
 
         <header className="space-y-3">
-          <h1 className="text-3xl md:text-4xl font-bold text-foreground">About</h1>
-          <p className="text-muted-foreground">Learn more about the Elastic DSL Converter and how to get involved.</p>
+          <h1 className="text-3xl md:text-4xl font-bold text-foreground">
+            About the Elasticsearch Query DSL to C# Converter
+          </h1>
+          <p className="text-muted-foreground">
+            How this tool helps developers translate Elasticsearch Query DSL into Elasticsearch C# for the
+            <span className="font-mono"> Elastic.Clients.Elasticsearch</span> .NET client.
+          </p>
         </header>
 
         <Card>
