@@ -100,30 +100,32 @@ const About = () => {
 
         <Card>
           <CardHeader>
-            <CardTitle>What is this tool?</CardTitle>
+            <CardTitle>What does the Elasticsearch Query DSL to C# converter do?</CardTitle>
             <CardDescription>
-              A free, open-source converter for Elasticsearch developers working in .NET.
+              A free, open-source converter for Elasticsearch C# developers working with the .NET client.
             </CardDescription>
           </CardHeader>
           <CardContent className="space-y-3 text-sm text-foreground/90 leading-relaxed">
             <p>
               The Elastic DSL Converter takes any Elasticsearch Query DSL request — the JSON you'd normally send to{" "}
               <code className="font-mono text-primary">_search</code> or{" "}
-              <code className="font-mono text-primary">_count</code> — and translates it into strongly-typed C# code
-              using the official <code className="font-mono text-primary">Elastic.Clients.Elasticsearch</code> client.
+              <code className="font-mono text-primary">_count</code> — and translates it into strongly-typed
+              Elasticsearch C# code using the official{" "}
+              <code className="font-mono text-primary">Elastic.Clients.Elasticsearch</code> client.
             </p>
             <p>
-              It supports both 8.x and 9.x versions of Elasticsearch and the .NET client, and produces a complete,
-              compilable file with an async wrapper so you can drop the result straight into your project.
+              It supports both 8.x and 9.x versions of Elasticsearch and the{" "}
+              <code className="font-mono text-primary">Elastic.Clients.Elasticsearch</code> .NET client, and produces a
+              complete, compilable file with an async wrapper so you can drop the result straight into your project.
             </p>
           </CardContent>
         </Card>
 
         <Card>
           <CardHeader>
-            <CardTitle>Frequently asked questions</CardTitle>
+            <CardTitle>Elasticsearch C# FAQ — Query DSL & Elastic.Clients.Elasticsearch</CardTitle>
             <CardDescription>
-              Common questions developers ask about translating Elasticsearch DSL to C#.
+              Common questions developers ask about translating Elasticsearch Query DSL into C# for the .NET client.
             </CardDescription>
           </CardHeader>
           <CardContent>
