@@ -1,9 +1,63 @@
 import { Link } from "react-router-dom";
+import { Helmet } from "react-helmet-async";
 import { Github, Bug, GitPullRequest, ArrowLeft } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "@/components/ui/accordion";
 
 const GITHUB_URL = "https://github.com/Karolinebryn/elasticdslconverter";
+const SITE_URL = "https://elasticdslconverter.lovable.app";
+
+const FAQS: { question: string; answer: string }[] = [
+  {
+    question: "What does the Elastic DSL Converter do?",
+    answer:
+      "It takes any Elasticsearch Query DSL request (the JSON you'd send to _search or _count) and translates it into strongly-typed C# code using the official Elastic.Clients.Elasticsearch .NET client. The output is a complete, compilable file with an async wrapper you can drop straight into your project.",
+  },
+  {
+    question: "Which versions of Elasticsearch and the .NET client are supported?",
+    answer:
+      "Both 8.x and 9.x of Elasticsearch and the matching Elastic.Clients.Elasticsearch .NET client. Pick the target version in the UI before translating and the prompt switches to the correct API surface.",
+  },
+  {
+    question: "How do I migrate from NEST to Elastic.Clients.Elasticsearch?",
+    answer:
+      "NEST is deprecated in favour of Elastic.Clients.Elasticsearch from 8.x onwards. The fastest path is to take your existing JSON queries (or the JSON NEST was producing) and run them through this converter to get the equivalent fluent C# in the new client. From there you only need to wire up your own ElasticsearchClient and document types.",
+  },
+  {
+    question: "Can I dynamically build queries with lists of values?",
+    answer:
+      "Yes. Paste your DSL with the dynamic part included (for example a should clause with multiple terms) and the converter produces fluent C# you can adapt — typically by replacing the inline list with a variable and projecting it into the Terms or Should builder.",
+  },
+  {
+    question: "How do I combine multiple must, should, and must_not clauses?",
+    answer:
+      "In the new client you build a BoolQuery and pass arrays of Query objects to Must, Should, and MustNot. The converter generates this structure for you whenever your DSL contains a bool query, including nested combinations.",
+  },
+  {
+    question: "Is the tool free and open source?",
+    answer:
+      "Yes. The Elastic DSL Converter is MIT licensed and the source is on GitHub. Bug reports, wrong-translation examples, and pull requests are all welcome.",
+  },
+];
+
+const faqJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  mainEntity: FAQS.map((f) => ({
+    "@type": "Question",
+    name: f.question,
+    acceptedAnswer: {
+      "@type": "Answer",
+      text: f.answer,
+    },
+  })),
+};
 
 const About = () => {
   return (
