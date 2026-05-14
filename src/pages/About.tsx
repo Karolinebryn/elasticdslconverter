@@ -63,10 +63,10 @@ const About = () => {
   return (
     <div className="min-h-screen bg-background">
       <Helmet>
-        <title>About — Elasticsearch Query DSL to C# Converter | Elastic.Clients.Elasticsearch</title>
+        <title>About — Elasticsearch Query DSL to C# Converter</title>
         <meta
           name="description"
-          content="About the Elasticsearch Query DSL to C# converter — a free, open-source tool for Elasticsearch C# developers using the Elastic.Clients.Elasticsearch .NET client (8.x/9.x)."
+          content="Free, open-source converter from Elasticsearch Query DSL to C# for Elastic.Clients.Elasticsearch (.NET 8.x/9.x)."
         />
         <link rel="canonical" href={`${SITE_URL}/about`} />
         <meta property="og:title" content="About — Elasticsearch Query DSL to C# Converter" />
