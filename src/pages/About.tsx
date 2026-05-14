@@ -116,6 +116,27 @@ const About = () => {
 
         <Card>
           <CardHeader>
+            <CardTitle>Frequently asked questions</CardTitle>
+            <CardDescription>
+              Common questions developers ask about translating Elasticsearch DSL to C#.
+            </CardDescription>
+          </CardHeader>
+          <CardContent>
+            <Accordion type="single" collapsible className="w-full">
+              {FAQS.map((faq, i) => (
+                <AccordionItem key={faq.question} value={`item-${i}`}>
+                  <AccordionTrigger className="text-left">{faq.question}</AccordionTrigger>
+                  <AccordionContent className="text-sm text-foreground/90 leading-relaxed">
+                    {faq.answer}
+                  </AccordionContent>
+                </AccordionItem>
+              ))}
+            </Accordion>
+          </CardContent>
+        </Card>
+
+        <Card>
+          <CardHeader>
             <CardTitle className="flex items-center gap-2">
               <Github className="w-5 h-5" />
               Open source on GitHub
