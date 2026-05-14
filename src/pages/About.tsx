@@ -98,6 +98,7 @@ const About = () => {
           </p>
         </header>
 
+        <main className="space-y-8">
         <Card>
           <CardHeader>
             <CardTitle>What does the Elasticsearch Query DSL to C# converter do?</CardTitle>
@@ -188,6 +189,7 @@ const About = () => {
             </div>
           </CardContent>
         </Card>
+        </main>
       </div>
     </div>
   );

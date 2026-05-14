@@ -1,0 +1,10 @@
+# Elastic DSL Converter
+
+> Free, open-source tool that converts Elasticsearch Query DSL into strongly-typed C# for the Elastic.Clients.Elasticsearch .NET client (8.x and 9.x).
+
+Paste any Elasticsearch Query DSL JSON (the body you would send to `_search` or `_count`) and get a complete, compilable C# file with an async wrapper using the official `Elastic.Clients.Elasticsearch` client. Useful for migrating from the deprecated NEST client.
+
+## Pages
+
+- [Translator](/): Paste Elasticsearch Query DSL and get C# code for Elastic.Clients.Elasticsearch.
+- [About](/about): What the converter does, supported versions, NEST migration, and FAQ.
