@@ -62,6 +62,22 @@ const faqJsonLd = {
 const About = () => {
   return (
     <div className="min-h-screen bg-background">
+      <Helmet>
+        <title>About — Elastic DSL Converter</title>
+        <meta
+          name="description"
+          content="About the Elastic DSL Converter: a free, open-source tool that translates Elasticsearch Query DSL into strongly-typed C# for the Elastic.Clients.Elasticsearch .NET client."
+        />
+        <link rel="canonical" href={`${SITE_URL}/about`} />
+        <meta property="og:title" content="About — Elastic DSL Converter" />
+        <meta
+          property="og:description"
+          content="Free, open-source converter from Elasticsearch Query DSL to strongly-typed C# for the Elastic .NET client."
+        />
+        <meta property="og:url" content={`${SITE_URL}/about`} />
+        <meta property="og:type" content="website" />
+        <script type="application/ld+json">{JSON.stringify(faqJsonLd)}</script>
+      </Helmet>
       <div className="container max-w-4xl mx-auto px-4 py-10 space-y-8">
         <div>
           <Button asChild variant="ghost" size="sm">
